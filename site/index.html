@@ -476,7 +476,7 @@ async function marcarEscolhido(botao) {
     botao.textContent = "Aguarde...";
 
     try {
-        const resp = await fetch(`/.netlify/functions/pagamento?id=${id}`);
+        const resp = await fetch(`/api/pagamento?id=${id}`);
         const data = await resp.json();
 
         if (data.checkout) {
