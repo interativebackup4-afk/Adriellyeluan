@@ -413,7 +413,7 @@
         // ==========================================
         // CONFIGURAÇÃO DO GOOGLE (API_URL)
         // ==========================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbzXDsbPBsQKIgTWGTOr4KbIA2U28AwdIF7TKkPye0zySCRFFu6T7SrpG_guV4mOEtQ9SA/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwVwFo3TD2H-w30J_mDunwTtprmHcInll4s2cprxtknZWFFdozlx5jkzNN-pByjbx64QQ/exec";
 
         let presenteSelecionado = null;
 
@@ -476,7 +476,7 @@ async function marcarEscolhido(botao) {
     botao.textContent = "Aguarde...";
 
     try {
-        const resp = await fetch(`/api/pagamento?id=${id}`);
+        const resp = await fetch(`/.netlify/functions/pagamento?id=${id}`);
         const data = await resp.json();
 
         if (data.checkout) {
