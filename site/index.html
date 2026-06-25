@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrielly & Luan - Wedding</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CONFIGURAÇÕES GERAIS E VARIÁVEIS */
+        :root {
+            --dark: #111111;
+            --light: #f9f9f9;
+            --white: #ffffff;
+            --gray: #888888;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 400; }
+        a { text-decoration: none; color: inherit; }
+
+        .bg-dark { background-color: var(--dark); color: var(--white); }
+        .bg-light { background-color: var(--light); color: var(--dark); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
+        .text-center { text-align: center; }
+
+        .btn {
+            display: inline-block;
+            border: 1px solid currentColor;
+            background: transparent;
+            color: inherit;
+            padding: 12px 24px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .bg-dark .btn:hover { background: var(--white); color: var(--dark); }
+        .bg-light .btn:hover { background: var(--dark); color: var(--white); }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--white);
+            z-index: 100;
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(6px);
+        }
+        .logo { font-size: 1.2rem; letter-spacing: 3px; }
+        .nav-links { display: flex; gap: 30px; font-size: 0.75rem; text-transform: uppercase; list-style: none; }
+        .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.3s; cursor: pointer; }
+        .nav-links a:hover { color: #fff; }
+
+        /* HAMBURGUER */
+        .hamburger {
+            display: none; flex-direction: column; gap: 5px;
+            cursor: pointer; padding: 4px; background: none; border: none;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 1.5px;
+            background: var(--white); transition: all 0.3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4.5px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4.5px); }
+
+        .mobile-menu {
+            display: none; position: fixed;
+            top: 60px; left: 0; right: 0;
+            background: rgba(17,17,17,0.97);
+            backdrop-filter: blur(10px);
+            z-index: 99; flex-direction: column;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px;
+            color: rgba(255,255,255,0.75); text-decoration: none;
+            padding: 18px 30px; border-bottom: 1px solid rgba(255,255,255,0.06);
+            text-align: center; transition: color 0.3s; cursor: pointer;
+        }
+        .mobile-menu a:hover { color: #fff; }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://iili.io/BmPGL0l.webp') center/cover;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            padding-left: 10%;
+        }
+        .hero-content h1 { font-size: 5rem; line-height: 1.1; margin-bottom: 20px; }
+        .hero-content p { font-size: 1rem; letter-spacing: 5px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 20px; display: inline-block; }
+
+        .countdown-section { text-align: center; padding: 80px 20px; }
+        .timer { display: flex; justify-content: center; gap: 50px; margin-bottom: 30px; }
+        .time-box h2 { font-size: 4rem; margin-bottom: 5px; }
+        .leaf-divider { width: 250px; opacity: 0.5; margin: 0 auto; display: block; }
+
+        .historia-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .historia-images { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 500px; }
+        .historia-images img { width: 100%; height: 100%; object-fit: cover; }
+        .img-large { grid-row: 1 / 3; }
+
+        .detalhes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; text-align: center; }
+        .detalhe-item i { font-size: 2rem; margin-bottom: 20px; color: var(--gray); }
+
+        .presentes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .presente-card { background: var(--white); padding: 30px; text-align: center; border: 1px solid #eee; transition: 0.3s; }
+        .presente-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .btn-presente {
+            width: 100%; padding: 12px; background: var(--dark); color: var(--white); border: none; 
+            cursor: pointer; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;
+        }
+        .btn-presente.comprado { background: #ccc !important; color: #777 !important; cursor: not-allowed; }
+
+        .rsvp-grid { display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; }
+        .rsvp-img { background: url('https://images.unsplash.com/photo-1507290439931-a861b5a38200?auto=format&fit=crop&w=1000&q=80') center/cover; }
+        .rsvp-content { padding: 60px 10%; display: flex; flex-direction: column; justify-content: center; }
+
+        .galeria-grid { display: flex; flex-wrap: wrap; }
+        .galeria-grid img { width: 20%; height: 250px; object-fit: cover; filter: grayscale(100%); transition: 0.4s; }
+        .galeria-grid img:hover { filter: grayscale(0%); }
+
+        footer { padding: 80px 20px; text-align: center; }
+        .social-icons { margin: 20px 0; font-size: 1.5rem; }
+        .social-icons i { margin: 0 15px; cursor: pointer; }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: #fff; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; 
+            text-align: center; position: relative; color: #111;
+        }
+        .btn-confirmar {
+            background: var(--dark); color: #fff; border: none; padding: 15px; width: 100%; 
+            margin-top: 20px; cursor: pointer; text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+
+            .hero { padding-left: 5%; padding-right: 5%; }
+            .hero-content h1 { font-size: clamp(2.5rem, 12vw, 4rem); }
+            .hero-content p { font-size: 0.8rem; letter-spacing: 3px; }
+
+            .timer { gap: 16px; }
+            .time-box h2 { font-size: 2.2rem; }
+
+            .historia-grid { grid-template-columns: 1fr; gap: 30px; }
+            .historia-images { height: 300px; }
+            .container { padding: 60px 20px; }
+
+            .detalhes-grid { grid-template-columns: 1fr; gap: 30px; }
+
+            .presentes-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .presente-card { padding: 20px 14px; }
+
+            .galeria-grid img { width: 50%; }
+
+            .rsvp-grid { grid-template-columns: 1fr; }
+            .rsvp-img { display: none; }
+            .rsvp-content { padding: 40px 20px; }
+        }
+        @media (max-width: 400px) {
+            .presentes-grid { grid-template-columns: 1fr; }
+        }
+
+        /* MODAL PAGAMENTO */
+        .payment-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.75);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .payment-modal-overlay.open { display: flex; }
+        .payment-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 480px;
+            height: calc(100vh - 32px);
+            max-height: 700px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .payment-modal-header {
+            padding: 14px 20px;
+            background: var(--dark);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+        .payment-modal-close {
+            background: none; border: none; color: var(--white);
+            font-size: 1.4rem; cursor: pointer; line-height: 1;
+            padding: 0 4px;
+        }
+        #payment-brick-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .payment-modal-loading {
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
+            gap: 14px;
+            color: var(--gray);
+            font-size: 0.8rem;
+            position: absolute;
+            top: 47px; left: 0; right: 0; bottom: 0;
+            background: #fff;
+            z-index: 1;
+        }
+        .spinner {
+            width: 36px; height: 36px;
+            border: 2px solid #eee;
+            border-top-color: var(--dark);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .payment-modal-overlay { padding: 0; align-items: flex-end; }
+            .payment-modal {
+                max-width: 100%;
+                height: 93vh;
+                max-height: none;
+                border-radius: 16px 16px 0 0;
+            }
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">A&L</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#historia">Nossa História</a></li>
+            <li><a href="#detalhes">Detalhes</a></li>
+            <li><a href="#presentes">Presentes</a></li>
+            <li><a href="#rsvp">Confirmação</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" onclick="closeMenu()">Home</a>
+        <a href="#historia" onclick="closeMenu()">Nossa História</a>
+        <a href="#detalhes" onclick="closeMenu()">Detalhes</a>
+        <a href="#presentes" onclick="closeMenu()">Presentes</a>
+        <a href="#rsvp" onclick="closeMenu()">Confirmação</a>
+    </div>
+
+    <header class="hero" id="home">
+        <div class="hero-content">
+            <h4>Wedding</h4>
+            <h1>ADRIELLY<br>&<br>LUAN</h1>
+            <p>07 • 11 • 2026</p>
+        </div>
+    </header>
+
+    <section class="countdown-section bg-light" id="countdown-area">
+        <h4>Faltam</h4>
+        <div class="timer">
+            <div class="time-box"><h2 id="dias">00</h2><p>Dias</p></div>
+            <div class="time-box"><h2 id="horas">00</h2><p>Horas</p></div>
+            <div class="time-box"><h2 id="minutos">00</h2><p>Minutos</p></div>
+            <div class="time-box"><h2 id="segundos">00</h2><p>Segundos</p></div>
+        </div>
+        <svg class="leaf-divider" viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,15 Q50,5 100,15 T190,15" fill="none" stroke="#888" stroke-width="1"/>
+            <path d="M80,10 Q90,0 100,10 Q90,20 80,10" fill="none" stroke="#888" stroke-width="1"/>
+            <path d="M120,10 Q110,0 100,10 Q110,20 120,10" fill="none" stroke="#888" stroke-width="1"/>
+        </svg>
+    </section>
+
+    <section class="bg-dark" id="historia">
+        <div class="container historia-grid">
+            <div class="historia-text">
+                <h4>Nossa História</h4>
+                <h2>Entre histórias<br>e momentos,<br>vamos construindo<br>uma vida juntos.</h2>
+                <button class="btn">Ler Nossa História</button>
+            </div>
+            <div class="historia-images">
+                <img src="https://iili.io/BmiJ9j4.webp" class="img-large" alt="Casal">
+                <img src="https://iili.io/BmiJ2GS.webp" alt="Casal">
+                <img src="https://iili.io/BmiJHZl.webp" alt="Alianças">
+            </div>
+        </div>
+    </section>
+
+      <section class="bg-light container" id="detalhes">
+        <h2 class="section-title">Detalhes</h2>
+        <div class="detalhes-grid">
+            <div class="detalhe-item">
+                <i class="far fa-calendar"></i>
+                <h3>Data</h3>
+                <p>07 de Novembro de 2026<br>Às 19h30</p>
+            </div>
+            <div class="detalhe-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Local</h3>
+                <p>Maison Nobre<br>Belém - Pa</p>
+            </div>
+            <div class="detalhe-item">
+                <i class="fas fa-user-tie"></i>
+                <h3>Traje</h3>
+                <p>Esporte Fino<br>(Sugestão: Tons Claros)</p>
+            </div>
+        </div>
+        <div class="text-center">
+            <button class="btn" style="background: var(--dark); color: var(--white);">Ver no Mapa</button>
+        </div>
+    </section>
+
+
+    <section class="bg-light container" id="presentes">
+        <h2 class="section-title">Lista de Presentes</h2>
+        <div class="presentes-grid">
+            <div class="presente-card">
+                <i class="fas fa-plane-departure presente-icon"></i>
+                <h3 class="presente-nome"></h3>
+                <p class="presente-valor"></p>
+                <button class="btn-presente" onclick="marcarEscolhido(this)">Presentear</button>
+            </div>
+    
+        </div>
+    </section>
+
+
+    <div id="pix-modal" class="modal-overlay"> /*PIX MODEL*/
+        <div class="modal-content">
+            <span onclick="fecharModal()" style="position: absolute; top: 15px; right: 20px; cursor: pointer; font-size: 1.5rem;">&times;</span>
+            <h3 id="modal-titulo"></h3>
+            <p id="modal-valor" style="font-weight: bold; margin: 10px 0;"></p>
+            <img src="https://iili.io/BmLszfs.jpg" alt="QR Code" style="margin: 20px 0;">
+            <p style="font-size: 0.8rem; color: #666;">Pague o PIX e clique abaixo para confirmar.</p>
+            <button class="btn-confirmar" onclick="confirmarPresente()">Confirmar Pagamento</button>
+        </div>
+    </div>
+
+
+    <section class="galeria-grid">
+        <img src="https://iili.io/BmiHyuf.webp" alt="Galeria">
+        <img src="https://iili.io/BmiHbvs.webp" alt="Galeria">
+        <img src="https://iili.io/BmiJdn2.webp" alt="Galeria">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Galeria">
+        <img src="https://images.unsplash.com/photo-1509927083803-4bd519298ac4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Galeria">
+    </section>
+
+
+
+
+
+    <footer class="bg-dark"> 
+        <div class="quote">“</div>
+        <h3 class="versiculo">ACIMA DE TUDO, PORÉM, REVISTAM-SE DO AMOR,<br>QUE É O ELO PERFEITO.</h3>
+        <p class="referencia">COLOSSENSES 3:14</p>
+        
+        <div class="social-icons">
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-whatsapp"></i>
+        </div>
+        
+        <p class="copyright">© 2026 ADRIELLY & LUAN</p>
+    </footer>
+
+
+    <script>
+        // ==========================================
+        // CONFIGURAÇÃO DO GOOGLE (API_URL)
+        // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbzXDsbPBsQKIgTWGTOr4KbIA2U28AwdIF7TKkPye0zySCRFFu6T7SrpG_guV4mOEtQ9SA/exec";
+
+        let presenteSelecionado = null;
+
+        // Ao carregar a página, verifica o que já foi comprado
+        window.onload = function() {
+            carregarPresentesEscolhidos();
+            iniciarContagem();
+        };
+
+        async function carregarPresentesEscolhidos() {
+    const grid = document.querySelector('.presentes-grid');
+    grid.innerHTML = "Carregando presentes..."; // Mensagem temporária
+
+    try {
+        const response = await fetch(API_URL);
+        const presentes = await response.json();
+        
+        grid.innerHTML = ""; // Limpa a grid para colocar os itens da planilha
+
+       presentes.forEach(p => {
+
+    const [id, nome, valor, icone, status] = p;
+
+    const isVendido = status === "VENDIDO";
+
+    const card = document.createElement('div');
+    card.className = 'presente-card';
+
+            card.innerHTML = `
+                <i class="fas ${icone || 'fa-gift'} presente-icon"></i>
+                <h3 class="presente-nome">${nome}</h3>
+                <p class="presente-valor">${valor}</p>
+                <button class="btn-presente ${isVendido ? 'comprado' : ''}" 
+                        onclick="marcarEscolhido(this)" 
+                        data-id="${id}"
+                        data-valor="${valor}"
+                        ${isVendido ? 'disabled' : ''}>
+                    ${isVendido ? '<i class="fas fa-check"></i> Já Escolhido' : 'Presentear'}
+                </button>
+            `;
+            card.dataset.id = id;
+            grid.appendChild(card);
+        });
+    } catch (e) {
+        grid.innerHTML = "Erro ao carregar lista. Verifique a conexão.";
+    }
+}
+//FUNCÇÃO BOTÃO
+
+async function marcarEscolhido(botao) {
+    const card = botao.closest('.presente-card');
+    const id = card.dataset.id || botao.dataset.id;
+
+    if (!id) {
+        alert("Erro: presente não identificado. Recarregue a página.");
+        return;
+    }
+
+    botao.disabled = true;
+    botao.textContent = "Aguarde...";
+
+    try {
+        const resp = await fetch(`/.netlify/functions/pagamento?id=${id}`);
+        const data = await resp.json();
+
+        if (data.checkout) {
+            const prefId = data.preference_id || new URL(data.checkout).searchParams.get('pref_id');
+            const valorTxt = botao.dataset.valor || '';
+            const amount = parseFloat(valorTxt.replace(/[R$\s.\s]/g, '').replace(',', '.'));
+            console.log('amount:', amount, 'valorTxt:', valorTxt);
+            abrirPagamento(prefId, amount);
+        } else {
+            alert("Erro ao gerar pagamento. Tente novamente.");
+        }
+    } catch (err) {
+        alert("Erro de conexão. Tente novamente.");
+        console.error(err);
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Presentear";
+    }
+}
+// public key
+const MP_PUBLIC_KEY = "APP_USR-9da28d5e-903b-413c-bbdc-986308a79520";
+let bricksController = null;
+
+async function abrirPagamento(preferenceId, amount) {
+    document.getElementById('paymentModal').classList.add('open');
+    document.getElementById('paymentLoading').style.display = 'flex';
+    document.getElementById('payment-brick-container').innerHTML = '';
+    document.body.style.overflow = 'hidden';
+
+    if (bricksController) {
+        await bricksController.unmount();
+        bricksController = null;
+    }
+
+    const mp = new MercadoPago(MP_PUBLIC_KEY, { locale: 'pt-BR' });
+    const bricksBuilder = mp.bricks();
+
+    bricksController = await bricksBuilder.create('payment', 'payment-brick-container', {
+        initialization: {
+            amount: amount,
+            preferenceId: preferenceId,
+        },
+        customization: {
+            paymentMethods: {
+                creditCard: 'all',
+                debitCard: 'all',
+                ticket: 'all',
+                bankTransfer: 'all',
+                atm: 'all',
+            },
+            visual: {
+                style: {
+                    theme: 'default',
+                }
+            }
+        },
+        callbacks: {
+            onReady: () => {
+                document.getElementById('paymentLoading').style.display = 'none';
+            },
+            onSubmit: async ({ selectedPaymentMethod, formData }) => {
+                fecharPagamento();
+                Swal.fire({
+                    title: 'Obrigado!',
+                    text: 'Ficamos muito felizes com o seu carinho.',
+                    icon: 'success',
+                    confirmButtonColor: '#111',
+                    confirmButtonText: 'Fechar'
+                });
+            },
+            onError: (error) => {
+                console.error('Brick error:', error);
+                document.getElementById('paymentLoading').style.display = 'none';
+                document.getElementById('payment-brick-container').innerHTML = 
+                    '<p style="text-align:center;padding:40px 20px;color:#888;font-size:0.8rem;">Erro ao carregar pagamento.<br>Tente novamente.</p>';
+            },
+        },
+    });
+}
+
+function fecharPagamento() {
+    document.getElementById('paymentModal').classList.remove('open');
+    document.getElementById('payment-brick-container').innerHTML = '';
+    document.body.style.overflow = '';
+    if (bricksController) {
+        bricksController.unmount();
+        bricksController = null;
+    }
+}
+
+        function fecharModal() {
+            document.getElementById('pix-modal').style.display = 'none';
+        }
+
+async function confirmarPresente() {
+
+    if (presenteSelecionado) {
+
+        const card = presenteSelecionado.closest('.presente-card');
+
+        const id = card.dataset.id;
+
+        fetch(`${API_URL}?id=${id}`, {
+            method: 'POST',
+            mode: 'no-cors'
+        });
+
+        aplicarEstiloComprado(presenteSelecionado);
+
+        fecharModal();
+
+        Swal.fire({
+            title: 'Obrigado!',
+            text: 'Ficamos muito felizes com o seu carinho.',
+            icon: 'success',
+            confirmButtonColor: '#111',
+            confirmButtonText: 'Fechar'
+        });
+    }
+}
+
+        function aplicarEstiloComprado(botao) {
+            botao.classList.add('comprado');
+            botao.innerHTML = '<i class="fas fa-check"></i> Já Escolhido';
+            botao.style.pointerEvents = 'none';
+        }
+
+        // MENU MOBILE
+        function toggleMenu() {
+            document.getElementById('hamburger').classList.toggle('open');
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+        function closeMenu() {
+            document.getElementById('hamburger').classList.remove('open');
+            document.getElementById('mobileMenu').classList.remove('open');
+        }
+
+        // --- LÓGICA DA CONTAGEM REGRESSIVA ---
+        function iniciarContagem() {
+            const dataCasamento = new Date("Nov 07, 2026 19:30:00").getTime();
+            setInterval(function() {
+                const agora = new Date().getTime();
+                const distancia = dataCasamento - agora;
+                const d = Math.floor(distancia / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((distancia % (1000 * 60)) / 1000);
+
+                document.getElementById("dias").innerHTML = d.toString().padStart(2, '0');
+                document.getElementById("horas").innerHTML = h.toString().padStart(2, '0');
+                document.getElementById("minutos").innerHTML = m.toString().padStart(2, '0');
+                document.getElementById("segundos").innerHTML = s.toString().padStart(2, '0');
+            }, 1000);
+        }
+    </script>
+
+    <!-- MODAL PAGAMENTO MP -->
+    <div class="payment-modal-overlay" id="paymentModal">
+        <div class="payment-modal">
+            <div class="payment-modal-header">
+                <span>Pagamento Seguro</span>
+                <button class="payment-modal-close" onclick="fecharPagamento()">&#x2715;</button>
+            </div>
+            <div class="payment-modal-loading" id="paymentLoading">
+                <div class="spinner"></div>
+                <span>Carregando pagamento...</span>
+            </div>
+            <div id="payment-brick-container"></div>
+        </div>
+    </div>
+</body>
+</html>
