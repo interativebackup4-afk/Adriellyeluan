@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adrielly & Luan - Wedding</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+    /* =====================================================
+       RESET & VARIÁVEIS
+    ===================================================== */
+    :root {
+        --dark:       #111111;
+        --light:      #f9f9f9;
+        --white:      #ffffff;
+        --gray:       #888888;
+        --gray-light: #eeeeee;
+        --font-sans:  'Montserrat', sans-serif;
+        --font-serif: 'Playfair Display', serif;
+        --transition-page: 0.8s ease;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: var(--font-sans);
+        color: var(--dark);
+        background: var(--light);
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 400; }
+    a { text-decoration: none; color: inherit; }
+
+    .bg-dark  { background-color: var(--dark);  color: var(--white); }
+    .bg-light { background-color: var(--light); color: var(--dark);  }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 40px;
+    }
+
+    .text-center { text-align: center; }
+
+    .section-label {
+        font-size: 0.7rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        opacity: 0.45;
+        margin-bottom: 14px;
+        display: block;
+    }
+
+    /* =====================================================
+       SPA — SISTEMA DE PÁGINAS COM HASH ROUTING
+    ===================================================== */
+    .page {
+        position: fixed;
+        inset: 0;
+        overflow-y: auto;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity    var(--transition-page),
+            visibility 0s linear var(--transition-page);
+        z-index: 1;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .page.active {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity var(--transition-page);
+        z-index: 2;
+    }
+
+    /* =====================================================
+       NAV GLOBAL (sempre visível sobre tudo)
+    ===================================================== */
+    nav {
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        padding: 18px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 1000;
+        background: rgba(17,17,17,0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        color: var(--white);
+        transition: background 0.4s;
+    }
+
+    .logo {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        letter-spacing: 4px;
+        cursor: pointer;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 32px;
+        list-style: none;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .nav-links a {
+        color: rgba(255,255,255,0.7);
+        transition: color 0.25s;
+        cursor: pointer;
+        padding-bottom: 2px;
+        border-bottom: 1px solid transparent;
+        transition: color 0.25s, border-color 0.25s;
+    }
+    .nav-links a:hover          { color: #fff; }
+    .nav-links a.nav-active     { color: #fff; border-bottom-color: rgba(255,255,255,0.5); }
+
+    /* hamburger */
+    .hamburger {
+        display: none; flex-direction: column; gap: 5px;
+        cursor: pointer; background: none; border: none; padding: 4px;
+    }
+    .hamburger span {
+        display: block; width: 22px; height: 1.5px;
+        background: var(--white); transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4.5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4.5px); }
+
+    .mobile-menu {
+        display: none;
+        position: fixed;
+        top: 58px; left: 0; right: 0;
+        background: rgba(17,17,17,0.97);
+        backdrop-filter: blur(12px);
+        z-index: 999;
+        flex-direction: column;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+        font-size: 0.68rem; text-transform: uppercase; letter-spacing: 3px;
+        color: rgba(255,255,255,0.65); padding: 18px 30px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        text-align: center; transition: color 0.25s; cursor: pointer;
+    }
+    .mobile-menu a:hover { color: #fff; }
+
+    /* =====================================================
+       PLAYER DE MÚSICA
+    ===================================================== */
+    #music-player {
+        position: fixed;
+        bottom: 24px; left: 24px;
+        background: rgba(17,17,17,0.88);
+        backdrop-filter: blur(10px);
+        color: #fff;
+        border-radius: 50px;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 1001;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+        font-size: 0.68rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: background 0.3s;
+    }
+    #music-player:hover { background: rgba(17,17,17,1); }
+
+    #btn-play-pause {
+        background: none;
+        border: 1px solid rgba(255,255,255,0.35);
+        color: #fff;
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.2s; flex-shrink: 0;
+    }
+    #btn-play-pause:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
+
+    .music-label { opacity: 0.6; white-space: nowrap; }
+
+    #volume-slider {
+        -webkit-appearance: none; appearance: none;
+        width: 56px; height: 2px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 2px; outline: none; cursor: pointer;
+    }
+    #volume-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 10px; height: 10px;
+        background: #fff; border-radius: 50%;
+    }
+
+    /* =====================================================
+       BOTÃO GENÉRICO
+    ===================================================== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid currentColor;
+        background: transparent;
+        color: inherit;
+        padding: 13px 28px;
+        font-family: var(--font-sans);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        cursor: pointer;
+        transition: background 0.28s, color 0.28s;
+    }
+    .bg-dark  .btn:hover { background: var(--white); color: var(--dark); }
+    .bg-light .btn:hover { background: var(--dark);  color: var(--white); }
+
+    /* =====================================================
+       PÁGINA 1 — HOME
+    ===================================================== */
+    #page-home { background: var(--dark); }
+
+    .hero {
+        height: 100vh;
+        background: linear-gradient(rgba(0,0,0,0.38), rgba(0,0,0,0.62)),
+                    url('https://iili.io/BmPGL0l.webp') center/cover no-repeat;
+        display: flex;
+        align-items: center;
+        padding-left: 10%;
+        color: var(--white);
+    }
+
+    .hero-content h4 {
+        font-family: var(--font-sans);
+        font-size: 0.7rem;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+        opacity: 0.6;
+        margin-bottom: 18px;
+    }
+
+    .hero-content h1 {
+        font-size: clamp(3.5rem, 7vw, 6rem);
+        line-height: 1.05;
+        margin-bottom: 28px;
+    }
+
+    .hero-content p {
+        font-size: 0.85rem;
+        letter-spacing: 6px;
+        border-top: 1px solid rgba(255,255,255,0.25);
+        padding-top: 20px;
+        display: inline-block;
+        opacity: 0.75;
+    }
+
+    /* contagem regressiva */
+    .countdown-section {
+        background: var(--dark);
+        color: var(--white);
+        text-align: center;
+        padding: 80px 20px;
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .countdown-section .section-label { color: rgba(255,255,255,0.4); }
+
+    .timer {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin: 30px 0 40px;
+    }
+
+    .time-box h2 {
+        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        margin-bottom: 6px;
+        font-weight: 400;
+    }
+
+    .time-box p {
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0.4;
+    }
+
+    .leaf-divider {
+        width: 220px;
+        opacity: 0.3;
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* nav quick links (home) */
+    .home-nav-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .home-nav-item {
+        padding: 48px 20px;
+        text-align: center;
+        cursor: pointer;
+        border-right: 1px solid rgba(255,255,255,0.08);
+        transition: background 0.25s;
+        color: var(--white);
+    }
+    .home-nav-item:last-child { border-right: none; }
+    .home-nav-item:hover { background: rgba(255,255,255,0.04); }
+
+    .home-nav-item i {
+        font-size: 1.4rem;
+        opacity: 0.4;
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    .home-nav-item span {
+        font-size: 0.65rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0.55;
+    }
+
+    /* =====================================================
+       PÁGINA 2 — NOSSA HISTÓRIA
+    ===================================================== */
+    #page-historia { background: var(--dark); color: var(--white); }
+
+    .historia-hero {
+        height: 55vh;
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
+                    url('https://iili.io/BmiJ9j4.webp') center/cover;
+        display: flex;
+        align-items: flex-end;
+        padding: 60px 10%;
+    }
+
+    .historia-hero h1 {
+        font-size: clamp(2.2rem, 5vw, 4rem);
+        color: #fff;
+    }
+
+    .historia-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+    }
+
+    .historia-text-col {
+        padding: 80px 8%;
+        border-right: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .historia-text-col h2 {
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        margin-bottom: 28px;
+        line-height: 1.3;
+    }
+
+    .historia-text-col p {
+        font-size: 0.88rem;
+        line-height: 1.9;
+        opacity: 0.65;
+        margin-bottom: 16px;
+    }
+
+    .historia-images-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 3px;
+        min-height: 520px;
+    }
+
+    .historia-images-col img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        filter: grayscale(20%);
+        transition: filter 0.4s;
+    }
+    .historia-images-col img:first-child {
+        grid-row: 1 / 3;
+    }
+    .historia-images-col img:hover { filter: grayscale(0); }
+
+    /* galeria strip */
+    .galeria-strip {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .galeria-strip img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        filter: grayscale(100%);
+        transition: filter 0.4s, transform 0.4s;
+        display: block;
+    }
+    .galeria-strip img:hover { filter: grayscale(0); transform: scale(1.02); }
+
+    /* =====================================================
+       PÁGINA 3 — DETALHES
+    ===================================================== */
+    #page-detalhes { background: var(--light); }
+
+    .detalhes-hero {
+        height: 42vh;
+        background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.65)),
+                    url('https://iili.io/BmiHyuf.webp') center/cover;
+        display: flex;
+        align-items: flex-end;
+        padding: 56px 10%;
+        padding-top: 80px;
+    }
+
+    .detalhes-hero h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        color: #fff;
+    }
+
+    .detalhes-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        border-bottom: 1px solid var(--gray-light);
+    }
+
+    .detalhe-item {
+        padding: 64px 40px;
+        text-align: center;
+        border-right: 1px solid var(--gray-light);
+    }
+    .detalhe-item:last-child { border-right: none; }
+
+    .detalhe-item i {
+        font-size: 1.6rem;
+        color: var(--gray);
+        margin-bottom: 24px;
+        display: block;
+    }
+
+    .detalhe-item h3 {
+        font-family: var(--font-serif);
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+    }
+
+    .detalhe-item p {
+        font-size: 0.82rem;
+        color: var(--gray);
+        line-height: 1.8;
+    }
+
+    /* mapa strip */
+    .mapa-strip {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .mapa-info {
+        padding: 72px 8%;
+        background: var(--dark);
+        color: var(--white);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .mapa-info h2 {
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        margin-bottom: 14px;
+        line-height: 1.2;
+    }
+
+    .mapa-info p {
+        font-size: 0.82rem;
+        opacity: 0.55;
+        margin-bottom: 36px;
+        line-height: 1.8;
+    }
+
+    .btn-mapa {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(255,255,255,0.4);
+        background: transparent;
+        color: #fff;
+        padding: 14px 28px;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        cursor: pointer;
+        transition: background 0.28s, border-color 0.28s;
+        align-self: flex-start;
+    }
+    .btn-mapa:hover { background: #fff; color: #111; border-color: #fff; }
+
+    .mapa-embed {
+        min-height: 360px;
+        background: #222;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mapa-embed iframe {
+        width: 100%; height: 100%;
+        border: none;
+        filter: grayscale(100%) contrast(1.1);
+        transition: filter 0.4s;
+        position: absolute; inset: 0;
+    }
+    .mapa-embed:hover iframe { filter: grayscale(0); }
+
+    /* =====================================================
+       PÁGINA 4 — PRESENTES
+    ===================================================== */
+    #page-presentes { background: var(--light); }
+
+    .presentes-header {
+        padding: 120px 10% 60px;
+        background: var(--dark);
+        color: var(--white);
+    }
+
+    .presentes-header h1 {
+        font-size: clamp(2.2rem, 5vw, 3.8rem);
+        margin-bottom: 12px;
+    }
+
+    .presentes-header p {
+        font-size: 0.82rem;
+        opacity: 0.45;
+        letter-spacing: 1px;
+    }
+
+    .presentes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1px;
+        background: var(--gray-light);
+        border-top: 1px solid var(--gray-light);
+    }
+
+    .presente-card {
+        background: var(--white);
+        padding: 32px 28px;
+        text-align: center;
+        transition: box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+    .presente-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.07); z-index: 1; position: relative; }
+
+    .presente-card img {
+        width: 100%; height: 190px;
+        object-fit: cover;
+        margin-bottom: 20px;
+        filter: grayscale(10%);
+        transition: filter 0.3s;
+    }
+    .presente-card:hover img { filter: grayscale(0); }
+
+    .presente-icon-wrap {
+        height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        background: var(--light);
+    }
+    .presente-icon-wrap i { font-size: 2.8rem; color: #ddd; }
+
+    .presente-nome {
+        font-family: var(--font-serif);
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+        flex: 1;
+    }
+
+    .presente-valor {
+        font-size: 0.8rem;
+        color: var(--gray);
+        margin-bottom: 22px;
+        letter-spacing: 1px;
+    }
+
+    .btn-presente {
+        width: 100%;
+        padding: 13px;
+        background: var(--dark);
+        color: var(--white);
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-family: var(--font-sans);
+        font-size: 0.68rem;
+        letter-spacing: 2px;
+        transition: background 0.25s, opacity 0.25s;
+        margin-top: auto;
+    }
+    .btn-presente:hover:not(:disabled) { background: #333; }
+    .btn-presente:disabled,
+    .btn-presente.comprado {
+        background: #e0e0e0 !important;
+        color: #aaa !important;
+        cursor: not-allowed;
+    }
+
+    /* modal pós-pagamento */
+    .modal-overlay {
+        display: none;
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.82);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-content {
+        background: #fff;
+        padding: 48px 40px;
+        max-width: 420px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        color: #111;
+        animation: modalIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.92) translateY(16px); }
+        to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-close {
+        position: absolute; top: 16px; right: 20px;
+        cursor: pointer; font-size: 1.4rem; opacity: 0.4;
+        background: none; border: none; color: #111;
+        transition: opacity 0.2s;
+    }
+    .modal-close:hover { opacity: 0.9; }
+
+    .modal-content h3 {
+        font-family: var(--font-serif);
+        font-size: 1.7rem;
+        margin-bottom: 6px;
+    }
+
+    .modal-content .modal-sub {
+        font-size: 0.78rem;
+        color: var(--gray);
+        margin-bottom: 28px;
+    }
+
+    .modal-field {
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid #ddd;
+        padding: 12px 0;
+        font-family: var(--font-sans);
+        font-size: 0.85rem;
+        outline: none;
+        margin-bottom: 18px;
+        display: block;
+        background: transparent;
+        color: #111;
+        transition: border-color 0.2s;
+        text-align: left;
+    }
+    .modal-field:focus { border-bottom-color: #111; }
+    .modal-field::placeholder { color: #ccc; }
+
+    .btn-modal-submit {
+        background: var(--dark);
+        color: #fff;
+        border: none;
+        padding: 15px;
+        width: 100%;
+        margin-top: 8px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-family: var(--font-sans);
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        transition: opacity 0.25s;
+    }
+    .btn-modal-submit:hover   { opacity: 0.85; }
+    .btn-modal-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* =====================================================
+       PÁGINA 5 — RSVP
+    ===================================================== */
+    #page-rsvp { background: var(--dark); color: var(--white); }
+
+    .rsvp-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+    }
+
+    .rsvp-image {
+        background: url('https://images.unsplash.com/photo-1507290439931-a861b5a38200?auto=format&fit=crop&w=1200&q=80') center/cover;
+        position: relative;
+    }
+
+    .rsvp-image::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.5));
+    }
+
+    .rsvp-form-col {
+        padding: 100px 10% 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .rsvp-form-col h1 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 8px;
+        line-height: 1.2;
+    }
+
+    .rsvp-form-col > p {
+        font-size: 0.78rem;
+        opacity: 0.4;
+        margin-bottom: 48px;
+        letter-spacing: 1px;
+    }
+
+    .rsvp-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+    }
+
+    .rsvp-field {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255,255,255,0.18);
+        padding: 12px 0;
+        font-family: var(--font-sans);
+        font-size: 0.82rem;
+        color: var(--white);
+        outline: none;
+        margin-bottom: 24px;
+        display: block;
+        transition: border-color 0.2s;
+    }
+    .rsvp-field:focus { border-bottom-color: rgba(255,255,255,0.7); }
+    .rsvp-field::placeholder { color: rgba(255,255,255,0.25); }
+    .rsvp-field option { color: #111; background: #fff; }
+
+    .rsvp-submit {
+        background: var(--white);
+        color: var(--dark);
+        border: none;
+        padding: 16px 40px;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        font-family: var(--font-sans);
+        font-size: 0.7rem;
+        cursor: pointer;
+        margin-top: 12px;
+        transition: opacity 0.25s;
+        align-self: flex-start;
+    }
+    .rsvp-submit:hover   { opacity: 0.85; }
+    .rsvp-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* =====================================================
+       FOOTER (dentro da home ou autônomo)
+    ===================================================== */
+    .site-footer {
+        background: var(--dark);
+        color: var(--white);
+        padding: 80px 20px;
+        text-align: center;
+        border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-quote {
+        font-family: var(--font-serif);
+        font-size: 5rem;
+        line-height: 0.5;
+        opacity: 0.12;
+        margin-bottom: 20px;
+    }
+
+    .footer-versiculo {
+        font-family: var(--font-sans);
+        font-size: 0.68rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0.45;
+        line-height: 2;
+        margin-bottom: 6px;
+    }
+
+    .footer-ref {
+        font-size: 0.65rem;
+        letter-spacing: 2px;
+        opacity: 0.25;
+        text-transform: uppercase;
+        margin-bottom: 36px;
+    }
+
+    .social-icons {
+        margin: 0 0 28px;
+        font-size: 1.1rem;
+        display: flex;
+        justify-content: center;
+        gap: 28px;
+    }
+    .social-icons i { cursor: pointer; opacity: 0.4; transition: opacity 0.2s; }
+    .social-icons i:hover { opacity: 1; }
+
+    .footer-copy {
+        font-size: 0.62rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        opacity: 0.2;
+    }
+
+    /* =====================================================
+       RESPONSIVO
+    ===================================================== */
+    @media (max-width: 900px) {
+        .historia-body          { grid-template-columns: 1fr; }
+        .historia-text-col      { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 60px 6%; }
+        .historia-images-col    { min-height: 360px; }
+        .mapa-strip             { grid-template-columns: 1fr; }
+        .mapa-embed             { min-height: 260px; }
+        .detalhes-grid          { grid-template-columns: 1fr; }
+        .detalhe-item           { border-right: none; border-bottom: 1px solid var(--gray-light); padding: 48px 32px; }
+        .detalhe-item:last-child{ border-bottom: none; }
+        .rsvp-layout            { grid-template-columns: 1fr; }
+        .rsvp-image             { display: none; }
+        .rsvp-form-col          { padding: 100px 8% 72px; }
+        .home-nav-grid          { grid-template-columns: repeat(2, 1fr); }
+        .galeria-strip          { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+        nav { padding: 16px 20px; }
+        .nav-links { display: none; }
+        .hamburger { display: flex; }
+        .container { padding: 60px 20px; }
+        .hero { padding-left: 6%; padding-right: 6%; }
+        .timer { gap: 24px; }
+        .time-box h2 { font-size: 2.4rem; }
+        .presentes-grid { grid-template-columns: repeat(2, 1fr); }
+        .rsvp-row { grid-template-columns: 1fr; gap: 0; }
+        .galeria-strip { grid-template-columns: repeat(2, 1fr); }
+        .galeria-strip img { height: 180px; }
+        #music-player { bottom: 14px; left: 12px; padding: 8px 14px; gap: 8px; }
+        #volume-slider { width: 44px; }
+    }
+
+    @media (max-width: 480px) {
+        .presentes-grid    { grid-template-columns: 1fr; }
+        .home-nav-grid     { grid-template-columns: 1fr 1fr; }
+        .galeria-strip     { grid-template-columns: 1fr 1fr; }
+        .presentes-header  { padding: 100px 6% 48px; }
+    }
+    </style>
+</head>
+<body>
+
+<!-- =====================================================
+     NAV GLOBAL
+===================================================== -->
+<nav id="main-nav">
+    <div class="logo" onclick="irPara('home')">A&L</div>
+    <ul class="nav-links">
+        <li><a onclick="irPara('home')"      data-page="home">Home</a></li>
+        <li><a onclick="irPara('historia')"  data-page="historia">Nossa História</a></li>
+        <li><a onclick="irPara('detalhes')"  data-page="detalhes">Detalhes</a></li>
+        <li><a onclick="irPara('presentes')" data-page="presentes">Presentes</a></li>
+        <li><a onclick="irPara('rsvp')"      data-page="rsvp">Confirmação</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+    <a onclick="irPara('home');closeMenu()">Home</a>
+    <a onclick="irPara('historia');closeMenu()">Nossa História</a>
+    <a onclick="irPara('detalhes');closeMenu()">Detalhes</a>
+    <a onclick="irPara('presentes');closeMenu()">Presentes</a>
+    <a onclick="irPara('rsvp');closeMenu()">Confirmação</a>
+</div>
+
+<!-- =====================================================
+     PLAYER DE MÚSICA
+===================================================== -->
+<div id="music-player">
+    <button id="btn-play-pause" title="Play / Pause">
+        <i class="fas fa-play" id="play-icon"></i>
+    </button>
+    <span class="music-label">♪ Nossa Música</span>
+    <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.5" title="Volume">
+    <!--
+        INSTRUÇÃO: coloque o caminho do seu MP3 em src abaixo.
+        Exemplo local:  src="musica/nossa-cancao.mp3"
+        Link externo:   src="https://link-direto-para-arquivo.mp3"
+    -->
+    <audio id="bg-audio" loop>
+       <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+<!-- =====================================================
+     PÁGINA 1 — HOME
+===================================================== -->
+<div class="page active" id="page-home">
+
+    <header class="hero">
+        <div class="hero-content">
+            <h4>Wedding</h4>
+            <h1>ADRIELLY<br>&amp;<br>LUAN</h1>
+            <p>07 • 11 • 2026</p>
+        </div>
+    </header>
+
+    <section class="countdown-section">
+        <span class="section-label">Contagem Regressiva</span>
+        <div class="timer">
+            <div class="time-box"><h2 id="dias">00</h2><p>Dias</p></div>
+            <div class="time-box"><h2 id="horas">00</h2><p>Horas</p></div>
+            <div class="time-box"><h2 id="minutos">00</h2><p>Min</p></div>
+            <div class="time-box"><h2 id="segundos">00</h2><p>Seg</p></div>
+        </div>
+        <svg class="leaf-divider" viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10,15 Q50,5 100,15 T190,15" fill="none" stroke="#fff" stroke-width="1"/>
+            <path d="M80,10 Q90,0 100,10 Q90,20 80,10" fill="none" stroke="#fff" stroke-width="1"/>
+            <path d="M120,10 Q110,0 100,10 Q110,20 120,10" fill="none" stroke="#fff" stroke-width="1"/>
+        </svg>
+    </section>
+
+    <!-- Quick nav grid -->
+    <div class="home-nav-grid bg-dark">
+        <div class="home-nav-item" onclick="irPara('historia')">
+            <i class="fas fa-heart"></i>
+            <span>Nossa História</span>
+        </div>
+        <div class="home-nav-item" onclick="irPara('detalhes')">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Detalhes</span>
+        </div>
+        <div class="home-nav-item" onclick="irPara('presentes')">
+            <i class="fas fa-gift"></i>
+            <span>Lista de Presentes</span>
+        </div>
+        <div class="home-nav-item" onclick="irPara('rsvp')">
+            <i class="fas fa-envelope-open-text"></i>
+            <span>Confirmar Presença</span>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-quote">"</div>
+        <p class="footer-versiculo">ACIMA DE TUDO, PORÉM, REVISTAM-SE DO AMOR,<br>QUE É O ELO PERFEITO.</p>
+        <p class="footer-ref">COLOSSENSES 3:14</p>
+        <div class="social-icons">
+            <i class="fab fa-instagram"></i>
+            <i class="fab fa-whatsapp"></i>
+        </div>
+        <p class="footer-copy">© 2026 ADRIELLY &amp; LUAN</p>
+    </footer>
+
+</div><!-- /page-home -->
+
+<!-- =====================================================
+     PÁGINA 2 — NOSSA HISTÓRIA
+===================================================== -->
+<div class="page" id="page-historia">
+
+    <div class="historia-hero">
+        <h1>Nossa<br>História</h1>
+    </div>
+
+    <div class="historia-body bg-dark">
+        <div class="historia-text-col">
+            <span class="section-label" style="color:rgba(255,255,255,0.3);">Adrielly &amp; Luan</span>
+            <h2>Entre histórias<br>e momentos,<br>vamos construindo<br>uma vida juntos.</h2>
+            <p>Tudo começou de uma forma simples e inesperada — como as melhores histórias sempre começam. Um encontro, um sorriso, uma conversa que se estendeu pela madrugada.</p>
+            <p>Com o tempo, percebemos que o que sentíamos era muito maior do que poderíamos imaginar. E foi nessa certeza tranquila, sem pressa, que decidimos dar o próximo passo juntos.</p>
+            <p>No dia 07 de novembro de 2026, vamos celebrar esse amor diante das pessoas que amamos. Será uma honra tê-los ao nosso lado.</p>
+        </div>
+        <div class="historia-images-col">
+            <img src="https://iili.io/BmiJ9j4.webp" alt="Casal">
+            <img src="https://iili.io/BmiJ2GS.webp" alt="Casal">
+            <img src="https://iili.io/BmiJHZl.webp" alt="Alianças">
+        </div>
+    </div>
+
+    <div class="galeria-strip">
+        <img src="https://iili.io/BmiHyuf.webp" alt="Galeria">
+        <img src="https://iili.io/BmiHbvs.webp" alt="Galeria">
+        <img src="https://iili.io/BmiJdn2.webp" alt="Galeria">
+        <img src="https://iili.io/BmiJ2GS.webp" alt="Galeria">
+        <img src="https://iili.io/BmiJHZl.webp" alt="Galeria">
+    </div>
+
+    <footer class="site-footer">
+        <p class="footer-copy">© 2026 ADRIELLY &amp; LUAN</p>
+    </footer>
+
+</div><!-- /page-historia -->
+
+<!-- =====================================================
+     PÁGINA 3 — DETALHES
+===================================================== -->
+<div class="page" id="page-detalhes">
+
+    <div class="detalhes-hero">
+        <h1>Detalhes<br>do Evento</h1>
+    </div>
+
+    <div class="detalhes-grid">
+        <div class="detalhe-item">
+            <i class="far fa-calendar-alt"></i>
+            <h3>Data &amp; Hora</h3>
+            <p>07 de Novembro de 2026<br>Às 19h30</p>
+        </div>
+        <div class="detalhe-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Local</h3>
+            <p>Maison Nobre<br>Belém — Pará</p>
+        </div>
+        <div class="detalhe-item">
+            <i class="fas fa-user-tie"></i>
+            <h3>Traje</h3>
+            <p>Esporte Fino<br>Sugestão: Tons Claros</p>
+        </div>
+    </div>
+
+    <div class="mapa-strip">
+        <div class="mapa-info">
+            <span class="section-label" style="color:rgba(255,255,255,0.3);">Localização</span>
+            <h2>Como<br>Chegar</h2>
+            <p>
+                Maison Nobre · Belém, Pará<br>
+                07 de Novembro · 19h30
+            </p>
+            <!--
+                INSTRUÇÃO: substitua o href abaixo pelo link do Google Maps do seu local.
+                Gere em maps.google.com → Compartilhar → Copiar link
+            -->
+            <a class="btn-mapa" href="https://maps.app.goo.gl/SEU_LINK_AQUI" target="_blank" rel="noopener">
+                <i class="fas fa-directions"></i> Abrir no Google Maps
+            </a>
+        </div>
+        <div class="mapa-embed">
+            <!--
+                INSTRUÇÃO: Cole aqui o iframe do Google Maps.
+                maps.google.com → Compartilhar → Incorporar um mapa → Copiar HTML
+            -->
+            <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127354.6...SEU_EMBED_AQUI"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Localização Maison Nobre">
+            </iframe>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p class="footer-copy">© 2026 ADRIELLY &amp; LUAN</p>
+    </footer>
+
+</div><!-- /page-detalhes -->
+
+<!-- =====================================================
+     PÁGINA 4 — PRESENTES
+===================================================== -->
+<div class="page" id="page-presentes">
+
+    <div class="presentes-header bg-dark">
+        <span class="section-label" style="color:rgba(255,255,255,0.3);">Lista de Presentes</span>
+        <h1>Escolha um<br>presente</h1>
+        <p>Cada presente é um gesto de carinho. Muito obrigado!</p>
+    </div>
+
+    <div class="presentes-grid" id="presentes-grid">
+        <div style="grid-column:1/-1;padding:60px;text-align:center;color:#bbb;font-size:0.82rem;letter-spacing:1px;">
+            Carregando presentes...
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p class="footer-copy">© 2026 ADRIELLY &amp; LUAN</p>
+    </footer>
+
+</div><!-- /page-presentes -->
+
+<!-- =====================================================
+     PÁGINA 5 — RSVP
+===================================================== -->
+<div class="page" id="page-rsvp">
+
+    <div class="rsvp-layout">
+        <div class="rsvp-image"></div>
+        <div class="rsvp-form-col">
+            <span class="section-label" style="color:rgba(255,255,255,0.3);">Confirmação de Presença</span>
+            <h1>Confirme<br>sua presença</h1>
+            <p>Confirme até 15 de outubro de 2026</p>
+
+            <div class="rsvp-row">
+                <input  class="rsvp-field" id="rsvp-nome"  type="text"  placeholder="Seu nome completo">
+                <input  class="rsvp-field" id="rsvp-email" type="email" placeholder="Seu e-mail">
+            </div>
+            <div class="rsvp-row">
+                <select class="rsvp-field" id="rsvp-acompanhantes">
+                    <option value="" disabled selected>Nº de acompanhantes</option>
+                    <option value="0">Somente eu</option>
+                    <option value="1">+ 1 acompanhante</option>
+                    <option value="2">+ 2 acompanhantes</option>
+                    <option value="3">+ 3 acompanhantes</option>
+                    <option value="4">+ 4 ou mais</option>
+                </select>
+                <input class="rsvp-field" id="rsvp-restricoes" type="text" placeholder="Restrições alimentares">
+            </div>
+            <textarea class="rsvp-field" id="rsvp-msg" rows="3"
+                      placeholder="Mensagem para os noivos (opcional)"
+                      style="resize:none;"></textarea>
+            <button class="rsvp-submit" id="btn-rsvp" onclick="enviarRsvp()">Confirmar Presença</button>
+        </div>
+    </div>
+
+</div><!-- /page-rsvp -->
+
+<!-- =====================================================
+     MODAL PÓS-PAGAMENTO
+===================================================== -->
+<div class="modal-overlay" id="modal-pos">
+    <div class="modal-content">
+        <button class="modal-close" onclick="fecharModalPos()">&times;</button>
+        <h3>Que alegria! 🎉</h3>
+        <p class="modal-sub">Deixe seu nome e uma mensagem para os noivos.</p>
+        <input    class="modal-field" id="pos-nome" type="text"     placeholder="Seu nome">
+        <textarea class="modal-field" id="pos-msg"  rows="3"
+                  placeholder="Sua mensagem..." style="resize:none;"></textarea>
+        <button class="btn-modal-submit" id="btn-pos-enviar" onclick="enviarMensagemPos()">
+            Enviar Mensagem
+        </button>
+    </div>
+</div>
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+<script>
+// =====================================================
+// ⚙️  CONFIGURAÇÕES — EDITE AQUI
+// =====================================================
+const API_URL = "https://script.google.com/macros/s/AKfycbySHMucGiHUl65AMf8hcngxdvLyMe8TpV_b_qc02N2YdbbFXqEs3ouyb4m-wuXInsFlpA/exec";
+// ^ Mantenha sua URL do Google Apps Script
+
+const LINK_MAPA = "https://maps.app.goo.gl/SEU_LINK_AQUI";
+// ^ Substitua pelo link do Google Maps do local
+
+// =====================================================
+
+// ------ ESTADO GLOBAL ------
+let presenteAtualId   = null;
+let presenteAtualNome = null;
+
+// =====================================================
+// SPA — HASH ROUTING
+// =====================================================
+const PAGES = ['home','historia','detalhes','presentes','rsvp'];
+
+function irPara(pageId) {
+    if (!PAGES.includes(pageId)) pageId = 'home';
+
+    // Atualiza hash sem rolar
+    history.pushState(null, '', '#' + pageId);
+
+    // Troca página
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + pageId);
+    if (target) {
+        target.classList.add('active');
+        target.scrollTop = 0;
+    }
+
+    // Destaca link ativo na nav
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('nav-active', a.dataset.page === pageId);
+    });
+
+    // Carrega presentes sob demanda (só quando entra na página)
+    if (pageId === 'presentes') carregarPresentes();
+}
+
+// Lê hash ao carregar e no botão "voltar"
+function lerHash() {
+    const hash = window.location.hash.replace('#','') || 'home';
+    irPara(hash);
+}
+
+window.addEventListener('popstate', lerHash);
+
+// =====================================================
+// INIT
+// =====================================================
+window.addEventListener('DOMContentLoaded', () => {
+    lerHash();
+    iniciarContagem();
+    iniciarPlayer();
+    verificarRetornoPagamento();
+});
+
+// =====================================================
+// PLAYER DE MÚSICA
+// =====================================================
+function iniciarPlayer() {
+    const audio  = document.getElementById('bg-audio');
+    const btn    = document.getElementById('btn-play-pause');
+    const icon   = document.getElementById('play-icon');
+    const volume = document.getElementById('volume-slider');
+    if (!audio) return;
+
+    audio.volume = 0.5;
+
+    btn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play().then(() => icon.className = 'fas fa-pause').catch(() => {});
+        } else {
+            audio.pause();
+            icon.className = 'fas fa-play';
+        }
+    });
+
+    volume.addEventListener('input', () => { audio.volume = volume.value; });
+
+    // Tenta autoplay silencioso; ativa no primeiro clique do usuário
+    audio.muted = true;
+    audio.play().then(() => {
+        audio.muted = false;
+        icon.className = 'fas fa-pause';
+    }).catch(() => {});
+
+    document.addEventListener('click', function tryPlay() {
+        if (audio.paused) audio.play().then(() => icon.className = 'fas fa-pause').catch(() => {});
+        document.removeEventListener('click', tryPlay);
+    }, { once: true });
+}
+
+// =====================================================
+// MENU MOBILE
+// =====================================================
+function toggleMenu() {
+    document.getElementById('hamburger').classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu() {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('mobileMenu').classList.remove('open');
+}
+
+// =====================================================
+// CONTAGEM REGRESSIVA
+// =====================================================
+function iniciarContagem() {
+    const alvo = new Date("Nov 07, 2026 19:30:00").getTime();
+    function tick() {
+        const d = alvo - Date.now();
+        if (d < 0) return;
+        const dias  = Math.floor(d / 86400000);
+        const horas = Math.floor((d % 86400000) / 3600000);
+        const min   = Math.floor((d % 3600000)  / 60000);
+        const seg   = Math.floor((d % 60000)    / 1000);
+        document.getElementById('dias').textContent     = String(dias).padStart(2,'0');
+        document.getElementById('horas').textContent    = String(horas).padStart(2,'0');
+        document.getElementById('minutos').textContent  = String(min).padStart(2,'0');
+        document.getElementById('segundos').textContent = String(seg).padStart(2,'0');
+    }
+    tick();
+    setInterval(tick, 1000);
+}
+
+// =====================================================
+// LISTA DE PRESENTES
+// =====================================================
+let presentesCarregados = false;
+
+async function carregarPresentes() {
+    if (presentesCarregados) return;
+
+    const grid = document.getElementById('presentes-grid');
+
+    try {
+        const res      = await fetch(API_URL);
+        const presentes = await res.json();
+        presentesCarregados = true;
+        grid.innerHTML = '';
+
+        presentes.forEach(p => {
+            const [id, nome, valor, imagem, status, linkMP] = p;
+            // linkMP = coluna F da planilha (link de pagamento pré-gerado pelo Apps Script)
+            const isPago = status === 'PAGO' || status === 'VENDIDO';
+
+            const card = document.createElement('div');
+            card.className = 'presente-card';
+            card.dataset.id   = id;
+            card.dataset.nome = nome;
+            card.dataset.link = linkMP || '';
+
+            card.innerHTML = `
+                ${imagem
+                    ? `<img src="${imagem}" alt="${nome}" loading="lazy">`
+                    : `<div class="presente-icon-wrap"><i class="fas fa-gift"></i></div>`
+                }
+                <p class="presente-nome">${nome}</p>
+                <p class="presente-valor">${valor}</p>
+                <button class="btn-presente${isPago ? ' comprado' : ''}"
+                        onclick="iniciarPagamento('${id}','${nome}')"
+                        ${isPago ? 'disabled' : ''}>
+                    ${isPago
+                        ? '<i class="fas fa-check"></i> Já escolhido'
+                        : 'Presentear'}
+                </button>
+            `;
+            grid.appendChild(card);
+        });
+
+    } catch(e) {
+        grid.innerHTML = `<div style="grid-column:1/-1;padding:60px;text-align:center;color:#c00;font-size:0.82rem;">
+            Erro ao carregar os presentes. Verifique sua conexão.
+        </div>`;
+    }
+}
+
+// =====================================================
+// PAGAMENTO — BOTÃO MP DINÂMICO
+// =====================================================
+async function iniciarPagamento(id, nome) {
+    presenteAtualId   = id;
+    presenteAtualNome = nome;
+
+    // Busca o link de pagamento gerado pelo Apps Script
+    const btn = document.querySelector(`.presente-card[data-id="${id}"] .btn-presente`);
+    if (btn) { btn.disabled = true; btn.textContent = 'Aguarde...'; }
+
+    try {
+        const res  = await fetch(`${API_URL}?acao=criarPagamento&id=${id}`);
+        const data = await res.json();
+
+        if (data.checkout) {
+            // Abre o checkout do Mercado Pago em nova aba
+            window.open(data.checkout, '_blank');
+        } else {
+            throw new Error(data.error || 'Sem link');
+        }
+    } catch(err) {
+        Swal.fire({
+            title: 'Erro',
+            text: 'Não foi possível gerar o link de pagamento. Tente novamente.',
+            icon: 'error',
+            confirmButtonColor: '#111'
+        });
+        console.error(err);
+    } finally {
+        if (btn) { btn.disabled = false; btn.textContent = 'Presentear'; }
+    }
+}
+
+// Marca card como pago visualmente
+function marcarCardPago(id) {
+    const card = document.querySelector(`.presente-card[data-id="${id}"]`);
+    if (!card) return;
+    const btn = card.querySelector('.btn-presente');
+    if (btn) {
+        btn.classList.add('comprado');
+        btn.innerHTML = '<i class="fas fa-check"></i> Já escolhido';
+        btn.disabled  = true;
+    }
+}
+
+// =====================================================
+// RETORNO DO MP (query string após pagamento)
+// =====================================================
+function verificarRetornoPagamento() {
+    const p      = new URLSearchParams(window.location.search);
+    const status = p.get('collection_status') || p.get('status');
+    const extRef = p.get('external_reference');
+
+    if (status === 'approved' && extRef) {
+        presenteAtualId   = extRef;
+        presenteAtualNome = p.get('nome_presente') || 'presente';
+        // Limpa URL
+        history.replaceState({}, '', window.location.pathname + window.location.hash);
+        // Abre modal pós-pag com um pequeno delay para a página montar
+        setTimeout(() => { irPara('presentes'); setTimeout(abrirModalPos, 600); }, 300);
+    }
+}
+
+// =====================================================
+// MODAL PÓS-PAGAMENTO
+// =====================================================
+function abrirModalPos() {
+    document.getElementById('modal-pos').classList.add('open');
+}
+function fecharModalPos() {
+    document.getElementById('modal-pos').classList.remove('open');
+}
+
+async function enviarMensagemPos() {
+    const nome = document.getElementById('pos-nome').value.trim();
+    const msg  = document.getElementById('pos-msg').value.trim();
+
+    if (!nome) {
+        Swal.fire({ title: 'Informe seu nome', icon: 'warning', confirmButtonColor: '#111' });
+        return;
+    }
+
+    const btn = document.getElementById('btn-pos-enviar');
+    btn.disabled    = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'salvarMensagem', id: presenteAtualId, nome, mensagem: msg }),
+            mode: 'no-cors'
+        });
+    } catch(e) {}
+
+    marcarCardPago(presenteAtualId);
+    fecharModalPos();
+
+    Swal.fire({
+        title: 'Obrigado! 💕',
+        html: `<p style="font-family:'Playfair Display',serif;font-size:1.1rem;">Ficamos muito felizes com o seu carinho, <strong>${nome}</strong>!</p>`,
+        icon: 'success',
+        confirmButtonColor: '#111',
+        confirmButtonText: 'Fechar'
+    });
+
+    btn.disabled    = false;
+    btn.textContent = 'Enviar Mensagem';
+}
+
+// =====================================================
+// RSVP
+// =====================================================
+async function enviarRsvp() {
+    const nome       = document.getElementById('rsvp-nome').value.trim();
+    const email      = document.getElementById('rsvp-email').value.trim();
+    const acomp      = document.getElementById('rsvp-acompanhantes').value;
+    const restricoes = document.getElementById('rsvp-restricoes').value.trim();
+    const msg        = document.getElementById('rsvp-msg').value.trim();
+
+    if (!nome || !email || acomp === '') {
+        Swal.fire({
+            title: 'Campos obrigatórios',
+            text: 'Preencha Nome, E-mail e número de acompanhantes.',
+            icon: 'warning', confirmButtonColor: '#111'
+        });
+        return;
+    }
+
+    const btn = document.getElementById('btn-rsvp');
+    btn.disabled    = true;
+    btn.textContent = 'Enviando...';
+
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ acao: 'salvarRsvp', nome, email, acompanhantes: acomp, restricoes, mensagem: msg }),
+            mode: 'no-cors'
+        });
+
+        ['rsvp-nome','rsvp-email','rsvp-restricoes','rsvp-msg'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        document.getElementById('rsvp-acompanhantes').selectedIndex = 0;
+
+        Swal.fire({
+            title: 'Presença Confirmada! 🥂',
+            html: `<p style="font-family:'Playfair Display',serif;">Estamos ansiosos para celebrar com você, <strong>${nome}</strong>!</p>`,
+            icon: 'success', confirmButtonColor: '#111', confirmButtonText: 'Fechar'
+        });
+    } catch(e) {
+        Swal.fire({ title: 'Erro', text: 'Não foi possível enviar. Tente novamente.', icon: 'error', confirmButtonColor: '#111' });
+    } finally {
+        btn.disabled    = false;
+        btn.textContent = 'Confirmar Presença';
+    }
+}
+</script>
+
+</body>
+</html>
